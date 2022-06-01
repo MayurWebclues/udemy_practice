@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import './answer.dart';
-import './questions.dart';
+import './quiz.dart';
+import './result.dart';
 
 void main() {
   runApp(const MyHomePage(
@@ -19,29 +19,53 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   var _questionIndex = 0;
-  var questions = const [
+  var _totalScore = 0;
+  var questions = [
     {
       'questionText': 'What\'s your favorite color?',
-      'answer': ['Black', 'Red', 'Green', 'Yellow']
+      'answer': [
+        {'text': 'Black', 'score': 1},
+        {'text': 'Red', 'score': 5},
+        {'text': 'Green', 'score': 3},
+        {'text': 'White', 'score': 1}
+      ]
     },
     {
       'questionText': 'What\'s your favorite animal?',
-      'answer': ['Cow', 'Dog', 'Lion', 'Bear']
+      'answer': [
+        {'text': 'Cow', 'score': 0},
+        {'text': 'DOG', 'score': 4},
+        {'text': 'Lion', 'score': 1},
+        {'text': 'Bear', 'score': 2}
+      ]
     },
     {
       'questionText': 'What\'s your favorite Food?',
-      'answer': ['Chakra', 'Para', 'Chinese', 'Manchu']
+      'answer': [
+        {'text': 'Chakra', 'score': 10},
+        {'text': 'patra', 'score': 5},
+        {'text': 'khandvi', 'score': 4},
+        {'text': 'Shukla', 'score': 1}
+      ]
     },
   ];
 
-  void _answerText() {
-    if (_questionIndex <questions.length - 1) {
-      return;
-    }
+  void _answerText(int score) {
+    _totalScore += score;
+
     setState(() {
       _questionIndex += 1;
     });
     print('answer pressed $_questionIndex');
+  }
+
+  void resetQuiz(){
+    setState(() {
+     _questionIndex = 0;
+     _totalScore = 0;
+    });
+
+
   }
 
   @override
@@ -52,22 +76,8 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: _questionIndex < questions.length
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Questions(
-                      questions[_questionIndex]['questionText'] as String),
-                  ...(questions[_questionIndex]['answer'] as List<String>)
-                      .map((answer) {
-                    return Answers(_answerText, answer);
-                  }).toList()
-                ], /**/
-              ),
-            )
-          : Center(
-              child: Text('you did it'),
-            ),
+          ?  Quiz(questions, _questionIndex, _answerText)
+          :Results(_totalScore, resetQuiz),
     ));
   }
 }
