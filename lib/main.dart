@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:udemy_practice/assignment_page_one.dart';
 
 import './quiz.dart';
 import './result.dart';
 
 void main() {
-  runApp(const MyHomePage(
-    title: 'My App',
+  runApp(const MaterialApp(
+      home: MyHomePage(title: "ddd"),
   ));
 }
 
@@ -78,6 +79,14 @@ class _MyHomePageState extends State<MyHomePage> {
       body: _questionIndex < questions.length
           ?  Quiz(questions, _questionIndex, _answerText)
           :Results(_totalScore, resetQuiz),
-    ));
+    floatingActionButton: FloatingActionButton(
+            onPressed: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AssignmentPageOne()),
+              );
+            },
+        ),)
+    );
   }
 }
